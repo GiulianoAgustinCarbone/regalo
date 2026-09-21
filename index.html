@@ -23,10 +23,48 @@
             transition: opacity 1.5s ease;
         }
 
+        /* --- NUEVO: Contenedor para alinear imágenes y textos --- */
+        .contenido-seccion {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 50px; /* Espacio entre imagen y texto */
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* Clases para alternar posiciones */
+        .img-izquierda {
+            flex-direction: row;
+        }
+
+        .img-derecha {
+            flex-direction: row-reverse;
+        }
+
+        /* Estilo para todas las imágenes de la historia */
+        .imagen-historia {
+            width: 250px; /* Tamaño de las imágenes */
+            height: auto;
+            border-radius: 15px; /* Bordes redondeados */
+            object-fit: cover;
+            filter: drop-shadow(0 0 15px rgba(255, 179, 198, 0.2));
+            
+            /* Animación inicial igual que el texto */
+            opacity: 0;
+            transform: translateY(60px);
+            transition: opacity 1.5s ease, transform 1.5s ease;
+        }
+
+        .imagen-historia.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .titulo-inicial {
             font-size: 4.5rem; 
             line-height: 1.4;
-            max-width: 1000px;
+            max-width: 800px;
             color: #ffb3c6; 
             text-shadow: 0 0 25px rgba(255, 0, 64, 0.6), 0 0 10px rgba(255, 179, 198, 0.4);
             
@@ -41,7 +79,7 @@
         .texto-scroll {
             font-size: 3rem; 
             line-height: 1.6;
-            max-width: 900px;
+            max-width: 800px;
             color: #ffb3c6; 
             text-shadow: 0 0 25px rgba(255, 0, 64, 0.6), 0 0 10px rgba(255, 179, 198, 0.4);
             
@@ -119,7 +157,6 @@
             animation: apuntar-centro 0.8s infinite alternate ease-in-out;
         }
 
-        /* Quitamos el scaleX(--flip) ya que las flechas rectas son simétricas */
         @keyframes apuntar-centro {
             0% { transform: rotate(var(--r)) translateY(-200px); }
             100% { transform: rotate(var(--r)) translateY(-155px); }
@@ -138,30 +175,77 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: white;
+            color: #ffd700; /* Mantenemos el dorado */
             font-size: 4rem; 
             font-weight: bold;
             opacity: 0; 
             transition: opacity 1.5s ease;
-            pointer-events: none;
+            pointer-events: none; /* Permite interactuar con lo que hay detrás */
             text-align: center;
-            text-shadow: 0 0 30px rgba(255, 0, 64, 1);
-            z-index: 10;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 
+                         0 0 30px rgba(255, 140, 0, 0.6), 
+                         0 0 45px rgba(218, 165, 32, 0.4);
+            /* --- CAMBIO AQUÍ: Lo subimos a 100 para que tape todo --- */
+            z-index: 100;
         }
 
         .frase-voladora {
             position: fixed; 
             top: 0;
             left: 0;
-            color: #ffb3c6;
-            font-size: 1.8rem; 
-            font-weight: bold;
-            pointer-events: none;
-            text-shadow: 0 0 15px rgba(255, 0, 64, 0.8);
             white-space: nowrap;
             opacity: 0;
             z-index: 15;
             transform-origin: center;
+            /* CLAVE: Cambiamos 'none' a 'auto' para que detecte el mouse */
+            pointer-events: auto; 
+        }
+
+        .frase-voladora span {
+            display: inline-block;
+            color: #ffb3c6;
+            font-size: 1.8rem; 
+            font-weight: bold;
+            text-shadow: 0 0 15px rgba(255, 0, 64, 0.8);
+            transition: transform 0.3s ease, color 0.3s ease, text-shadow 0.3s ease;
+            cursor: pointer; /* Cambia el cursor a la manito */
+        }
+
+        .frase-voladora:hover span {
+            transform: scale(1.4); /* Se agranda un 40% más */
+            color: #ffffff; /* La letra se pone blanca */
+            /* Se ilumina con el mismo dorado del mensaje central */
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.9), 0 0 30px rgba(255, 140, 0, 0.8);
+        }
+
+        .imagen-voladora {
+            position: fixed; 
+            top: 0;
+            left: 0;
+            width: 90px; /* Tamaño de los personajes voladores */
+            height: auto;
+            pointer-events: none; /* Para que no estorben si intenta clickear el texto */
+            opacity: 0;
+            z-index: 12; /* Un poco por detrás de las frases (que tienen 15) */
+            transform-origin: center;
+            filter: drop-shadow(0 0 10px rgba(255, 179, 198, 0.4));
+        }
+
+        /* --- NUEVO: Ajuste automático para celulares --- */
+        @media (max-width: 768px) {
+            .contenido-seccion {
+                flex-direction: column !important; /* Fuerza apilar elementos */
+                gap: 20px;
+            }
+            .titulo-inicial {
+                font-size: 3.5rem; /* Achicamos un poco el título para que entren las dos fotos */
+            }
+            .texto-scroll {
+                font-size: 2.2rem; /* Achicamos el texto para celulares */
+            }
+            .imagen-historia {
+                width: 200px; /* Imágenes más chicas en móvil */
+            }
         }
     </style>
 </head>
@@ -169,51 +253,75 @@
 
     <div class="indicador-scroll oculto" id="indicadorScroll">SEGUÍ BAJANDO ↓</div>
 
+    <!-- Título inicial con imágenes de pareja a los lados -->
     <div class="seccion historia">
-        <div class="titulo-inicial" id="tituloInicial">
-            Permiteme que te cuente algo...
+        <div class="contenido-seccion">
+            <img src="pareja.png" alt="Nosotros" class="imagen-historia" id="imgTitulo1">
+            <div class="titulo-inicial" id="tituloInicial">
+                Permiteme que te cuente algo...
+            </div>
+            <img src="pareja 2.png" alt="Nosotros 2" class="imagen-historia" id="imgTitulo2">
+        </div>
+    </div>
+
+    <!-- Textos alternando imágenes (Izquierda, Derecha, Izquierda, Derecha...) -->
+    <div class="seccion historia">
+        <div class="contenido-seccion img-izquierda">
+            <img src="cinnamoroll.png" alt="Cinnamoroll" class="imagen-historia">
+            <div class="texto-scroll">
+                Hace unos meses éramos completos desconocidos, individuos ajenos al otro, con nuestros propios sueños, metas y objetivos
+            </div>
         </div>
     </div>
 
     <div class="seccion historia">
-        <div class="texto-scroll">
-            Hace unos meses éramos completos desconocidos, individuos ajenos al otro, con nuestros propios sueños, metas y objetivos
+        <div class="contenido-seccion img-derecha">
+            <img src="kuromi.png" alt="Kuromi" class="imagen-historia">
+            <div class="texto-scroll">
+                Un dia apareciste vos, una dama deslumbrante, tranquila y elegante pero con un interes genuino y sincero
+            </div>
         </div>
     </div>
 
     <div class="seccion historia">
-        <div class="texto-scroll">
-            Un dia apareciste vos, una dama deslumbrante, tranquila y elegante pero con un interes genuino y sincero
+        <div class="contenido-seccion img-izquierda">
+            <img src="pompompurin.png" alt="Pompompurin" class="imagen-historia">
+            <div class="texto-scroll">
+                Mañana tras mañana, noche tras noche, me mostraste tu ternura, me permitiste conocer tu ser y me enseñaste tu corazón enorme y lleno de amor
+            </div>
         </div>
     </div>
 
     <div class="seccion historia">
-        <div class="texto-scroll">
-            Mañana tras mañana, noche tras noche, me mostraste tu ternura, me permitiste conocer tu ser y me enseñaste tu corazón enorme y lleno de amor
+        <div class="contenido-seccion img-derecha">
+            <img src="capibara.png" alt="Capibara" class="imagen-historia">
+            <div class="texto-scroll">
+                Y yo, día a día, me enamore profundamente de tus gustos, de tus extrañezas, tu figura y tu gracia, me dejaste ingresar en tu corazon y vos te colaste en lo profundo de mi alma.
+            </div>
         </div>
     </div>
 
     <div class="seccion historia">
-        <div class="texto-scroll">
-            Y yo, día a día, me enamore profundamente de tus gustos, de tus extrañezas, tu figura y tu gracia, me dejaste ingresar en tu corazon y vos te colaste en lo profundo de mi alma.
+        <div class="contenido-seccion img-izquierda">
+            <img src="gojo.png" alt="Imagen 5" class="imagen-historia">
+            <div class="texto-scroll">
+                Todas las mañanas me levanto imaginando que sera de ti, buscando tu calor y afecto, intentado compartir los finos momentos que nos da la vida en nuestras apretadas vidas, y al terminar el dia me acuesto soñando en un futuro juntos. 
+            </div>
         </div>
     </div>
 
     <div class="seccion historia">
-        <div class="texto-scroll">
-            Todas las mañanas me levanto imaginando que sera de ti, buscando tu calor y afecto, intentado compartir los finos momentos que nos da la vida en nuestras apretadas vidas, y al terminar el dia me acuesto soñando en un futuro juntos. 
+        <div class="contenido-seccion img-derecha">
+            <img src="pompompurin 2.gif" alt="Imagen 6" class="imagen-historia">
+            <div class="texto-scroll">
+                Sos la alegria de mi dia, mi sueño romantico complido, y por eso quiero que sepas que...
+            </div>
         </div>
     </div>
 
-    <div class="seccion historia">
-        <div class="texto-scroll">
-            Sos la alegria de mi dia, mi sueño romantico complido, y por eso quiero que sepas que...
-        </div>
-    </div>
-
+    <!-- Final interactivo -->
     <div class="seccion contenedor-corazon" id="seccionFinal">
         <div class="wrapper-corazon">
-            <!-- Flechas SVG reemplazadas por líneas 100% rectas -->
             <div class="flecha" style="--r: 12deg; animation-delay: 0.1s;">
                 <svg viewBox="0 0 40 80" width="100%" height="100%">
                     <line x1="20" y1="5" x2="20" y2="75" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
@@ -267,7 +375,7 @@
         </div>
     </div>
     
-    <div class="mensaje-central" id="miMensaje">TE AMO <br>Feliz Dia de la Primavera</div>
+    <div class="mensaje-central" id="miMensaje">TE AMO CANDE<br>Feliz Dia de la Primavera</div>
 
     <script>
         if ('scrollRestoration' in history) {
@@ -277,12 +385,17 @@
 
         const indicadorScroll = document.getElementById('indicadorScroll');
         const tituloInicial = document.getElementById('tituloInicial');
+        const imgTitulo1 = document.getElementById('imgTitulo1');
+        const imgTitulo2 = document.getElementById('imgTitulo2');
         const seccionFinal = document.getElementById('seccionFinal');
         const seccionesHistoria = document.querySelectorAll('.historia');
         let interaccionTerminada = false;
 
+        // --- NUEVO: Ahora las imágenes del título también se hacen visibles con el texto ---
         setTimeout(() => {
             tituloInicial.classList.add('visible');
+            imgTitulo1.classList.add('visible');
+            imgTitulo2.classList.add('visible');
         }, 1500);
 
         setTimeout(() => {
@@ -291,9 +404,10 @@
             }
         }, 4000);
 
+        // --- NUEVO: El observador ahora también detecta las imágenes para que aparezcan suavemente ---
         const observadorTextos = new IntersectionObserver((entradas) => {
             entradas.forEach(entrada => {
-                if (entrada.isIntersecting && entrada.target.classList.contains('texto-scroll')) {
+                if (entrada.isIntersecting && (entrada.target.classList.contains('texto-scroll') || entrada.target.classList.contains('imagen-historia'))) {
                     entrada.target.classList.add('visible');
                 }
             });
@@ -301,8 +415,11 @@
             threshold: 0.5 
         });
 
-        document.querySelectorAll('.texto-scroll').forEach(texto => {
-            observadorTextos.observe(texto);
+        // Aplicamos el observador a textos y a las imágenes de la historia (excluyendo las del título que ya animamos arriba)
+        document.querySelectorAll('.texto-scroll, .imagen-historia').forEach(elemento => {
+            if(elemento.id !== 'imgTitulo1' && elemento.id !== 'imgTitulo2') {
+                observadorTextos.observe(elemento);
+            }
         });
 
         const observadorFinal = new IntersectionObserver((entradas) => {
@@ -333,7 +450,7 @@
             "Mi felicidad", 
             "Hermosa", 
             "Mi amor",
-            "Precisa",
+            "Preciosa",
             "Mi vida",
             "WAPAAAAAAA",
             "Brillante",
@@ -343,6 +460,18 @@
             "Quiero verte",
             "Soy un Pinguino",
             "Mi Hello Kitty"
+        ];
+
+        const imagenesVoladoras = [
+            "cinnamoroll.png",
+            "kuromi.png",
+            "pompompurin.png",
+            "pompompurin 2.gif",
+            "capibara.png",
+            "gojo.png",
+            "kitty.png",
+            "tartaglia.png",
+            "black pink.png"
         ];
 
         corazon.addEventListener('click', () => {
@@ -375,13 +504,25 @@
                     crearFraseVoladora(frase);
                 }, index * 300); 
             });
+
+            imagenesVoladoras.forEach((src, index) => {
+                // Le damos un pequeño retraso extra para que salgan mezcladas con las frases
+                setTimeout(() => {
+                    crearImagenVoladora(src);
+                }, (index * 350) + 150); 
+            });
         });
 
         function crearFraseVoladora(texto) {
             const elemento = document.createElement('div');
             elemento.classList.add('frase-voladora');
-            elemento.innerText = texto;
-            document.body.appendChild(elemento); 
+            
+            // NUEVO: Creamos un span, le ponemos el texto y lo metemos en el div
+            const span = document.createElement('span');
+            span.innerText = texto;
+            elemento.appendChild(span);
+            
+            document.body.appendChild(elemento);
 
             let currentX = window.innerWidth / 2;
             let currentY = window.innerHeight / 2;
@@ -437,6 +578,70 @@
                 requestAnimationFrame(animar);
             }
             requestAnimationFrame(animar);
+        }
+
+        function crearImagenVoladora(src) {
+            const img = document.createElement('img');
+            img.src = src;
+            img.classList.add('imagen-voladora');
+            document.body.appendChild(img); 
+
+            let currentX = window.innerWidth / 2;
+            let currentY = window.innerHeight / 2;
+
+            const angulo = Math.random() * Math.PI * 2;
+            // Un poco más lentas que el texto para que se aprecie el personaje
+            const explosionSpeed = 10 + Math.random() * 8; 
+            let vx = Math.cos(angulo) * explosionSpeed;
+            let vy = Math.sin(angulo) * explosionSpeed;
+            
+            let scaling = 0.2; 
+            img.style.opacity = '1';
+
+            const velocidadVagabundeo = 1.2; 
+
+            function animar() {
+                const velocidadActual = Math.sqrt(vx * vx + vy * vy);
+                
+                if (velocidadActual > velocidadVagabundeo) {
+                    vx *= 0.95; 
+                    vy *= 0.95;
+                    if (scaling < 1) scaling += 0.02; // Escala hasta 1
+                } else if (velocidadActual < velocidadVagabundeo) {
+                    const factor = velocidadVagabundeo / Math.max(velocidadActual, 0.1);
+                    vx *= factor;
+                    vy *= factor;
+                    scaling = 1;
+                }
+
+                currentX += vx;
+                currentY += vy;
+
+                const width = img.offsetWidth * scaling;
+                const height = img.offsetHeight * scaling;
+
+                if (currentX - width / 2 < 0) {
+                    currentX = width / 2; 
+                    vx = Math.abs(vx);    
+                } else if (currentX + width / 2 > window.innerWidth) {
+                    currentX = window.innerWidth - width / 2;
+                    vx = -Math.abs(vx);   
+                }
+
+                if (currentY - height / 2 < 0) {
+                    currentY = height / 2;
+                    vy = Math.abs(vy);    
+                } else if (currentY + height / 2 > window.innerHeight) {
+                    currentY = window.innerHeight - height / 2;
+                    vy = -Math.abs(vy);   
+                }
+
+                img.style.transform = `translate(calc(${currentX}px - 50%), calc(${currentY}px - 50%)) scale(${scaling})`;
+
+                requestAnimationFrame(animar);
+            }
+            // Esperamos un instante para que la imagen cargue sus dimensiones antes de animar
+            img.onload = () => requestAnimationFrame(animar);
         }
     </script>
 
