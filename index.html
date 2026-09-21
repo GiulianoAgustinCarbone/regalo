@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Para ti</title>
+    <title>Te Amo</title>
     <style>
         body {
             margin: 0;
@@ -23,17 +23,15 @@
             transition: opacity 1.5s ease;
         }
 
-        /* --- NUEVO: Contenedor para alinear imágenes y textos --- */
         .contenido-seccion {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 50px; /* Espacio entre imagen y texto */
+            gap: 50px; 
             max-width: 1200px;
             width: 100%;
         }
 
-        /* Clases para alternar posiciones */
         .img-izquierda {
             flex-direction: row;
         }
@@ -42,15 +40,13 @@
             flex-direction: row-reverse;
         }
 
-        /* Estilo para todas las imágenes de la historia */
         .imagen-historia {
-            width: 250px; /* Tamaño de las imágenes */
+            width: 250px; 
             height: auto;
-            border-radius: 15px; /* Bordes redondeados */
+            border-radius: 15px; 
             object-fit: cover;
             filter: drop-shadow(0 0 15px rgba(255, 179, 198, 0.2));
             
-            /* Animación inicial igual que el texto */
             opacity: 0;
             transform: translateY(60px);
             transition: opacity 1.5s ease, transform 1.5s ease;
@@ -175,17 +171,16 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: #ffd700; /* Mantenemos el dorado */
+            color: #ffd700; 
             font-size: 4rem; 
             font-weight: bold;
             opacity: 0; 
             transition: opacity 1.5s ease;
-            pointer-events: none; /* Permite interactuar con lo que hay detrás */
+            pointer-events: none; 
             text-align: center;
             text-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 
                          0 0 30px rgba(255, 140, 0, 0.6), 
                          0 0 45px rgba(218, 165, 32, 0.4);
-            /* --- CAMBIO AQUÍ: Lo subimos a 100 para que tape todo --- */
             z-index: 100;
         }
 
@@ -197,7 +192,6 @@
             opacity: 0;
             z-index: 15;
             transform-origin: center;
-            /* CLAVE: Cambiamos 'none' a 'auto' para que detecte el mouse */
             pointer-events: auto; 
         }
 
@@ -208,13 +202,12 @@
             font-weight: bold;
             text-shadow: 0 0 15px rgba(255, 0, 64, 0.8);
             transition: transform 0.3s ease, color 0.3s ease, text-shadow 0.3s ease;
-            cursor: pointer; /* Cambia el cursor a la manito */
+            cursor: pointer; 
         }
 
         .frase-voladora:hover span {
-            transform: scale(1.4); /* Se agranda un 40% más */
-            color: #ffffff; /* La letra se pone blanca */
-            /* Se ilumina con el mismo dorado del mensaje central */
+            transform: scale(1.4);
+            color: #ffffff; 
             text-shadow: 0 0 20px rgba(255, 215, 0, 0.9), 0 0 30px rgba(255, 140, 0, 0.8);
         }
 
@@ -222,29 +215,28 @@
             position: fixed; 
             top: 0;
             left: 0;
-            width: 90px; /* Tamaño de los personajes voladores */
+            width: 90px; 
             height: auto;
-            pointer-events: none; /* Para que no estorben si intenta clickear el texto */
+            pointer-events: none; 
             opacity: 0;
-            z-index: 12; /* Un poco por detrás de las frases (que tienen 15) */
+            z-index: 12; 
             transform-origin: center;
             filter: drop-shadow(0 0 10px rgba(255, 179, 198, 0.4));
         }
 
-        /* --- NUEVO: Ajuste automático para celulares --- */
         @media (max-width: 768px) {
             .contenido-seccion {
-                flex-direction: column !important; /* Fuerza apilar elementos */
+                flex-direction: column !important; 
                 gap: 20px;
             }
             .titulo-inicial {
-                font-size: 3.5rem; /* Achicamos un poco el título para que entren las dos fotos */
+                font-size: 3.5rem; 
             }
             .texto-scroll {
-                font-size: 2.2rem; /* Achicamos el texto para celulares */
+                font-size: 2.2rem; 
             }
             .imagen-historia {
-                width: 200px; /* Imágenes más chicas en móvil */
+                width: 200px; 
             }
         }
     </style>
@@ -253,7 +245,6 @@
 
     <div class="indicador-scroll oculto" id="indicadorScroll">SEGUÍ BAJANDO ↓</div>
 
-    <!-- Título inicial con imágenes de pareja a los lados -->
     <div class="seccion historia">
         <div class="contenido-seccion">
             <img src="pareja.png" alt="Nosotros" class="imagen-historia" id="imgTitulo1">
@@ -264,7 +255,6 @@
         </div>
     </div>
 
-    <!-- Textos alternando imágenes (Izquierda, Derecha, Izquierda, Derecha...) -->
     <div class="seccion historia">
         <div class="contenido-seccion img-izquierda">
             <img src="cinnamoroll.png" alt="Cinnamoroll" class="imagen-historia">
@@ -319,7 +309,6 @@
         </div>
     </div>
 
-    <!-- Final interactivo -->
     <div class="seccion contenedor-corazon" id="seccionFinal">
         <div class="wrapper-corazon">
             <div class="flecha" style="--r: 12deg; animation-delay: 0.1s;">
@@ -391,7 +380,6 @@
         const seccionesHistoria = document.querySelectorAll('.historia');
         let interaccionTerminada = false;
 
-        // --- NUEVO: Ahora las imágenes del título también se hacen visibles con el texto ---
         setTimeout(() => {
             tituloInicial.classList.add('visible');
             imgTitulo1.classList.add('visible');
@@ -404,7 +392,6 @@
             }
         }, 4000);
 
-        // --- NUEVO: El observador ahora también detecta las imágenes para que aparezcan suavemente ---
         const observadorTextos = new IntersectionObserver((entradas) => {
             entradas.forEach(entrada => {
                 if (entrada.isIntersecting && (entrada.target.classList.contains('texto-scroll') || entrada.target.classList.contains('imagen-historia'))) {
@@ -415,7 +402,6 @@
             threshold: 0.5 
         });
 
-        // Aplicamos el observador a textos y a las imágenes de la historia (excluyendo las del título que ya animamos arriba)
         document.querySelectorAll('.texto-scroll, .imagen-historia').forEach(elemento => {
             if(elemento.id !== 'imgTitulo1' && elemento.id !== 'imgTitulo2') {
                 observadorTextos.observe(elemento);
@@ -506,7 +492,6 @@
             });
 
             imagenesVoladoras.forEach((src, index) => {
-                // Le damos un pequeño retraso extra para que salgan mezcladas con las frases
                 setTimeout(() => {
                     crearImagenVoladora(src);
                 }, (index * 350) + 150); 
@@ -517,7 +502,6 @@
             const elemento = document.createElement('div');
             elemento.classList.add('frase-voladora');
             
-            // NUEVO: Creamos un span, le ponemos el texto y lo metemos en el div
             const span = document.createElement('span');
             span.innerText = texto;
             elemento.appendChild(span);
@@ -590,7 +574,6 @@
             let currentY = window.innerHeight / 2;
 
             const angulo = Math.random() * Math.PI * 2;
-            // Un poco más lentas que el texto para que se aprecie el personaje
             const explosionSpeed = 10 + Math.random() * 8; 
             let vx = Math.cos(angulo) * explosionSpeed;
             let vy = Math.sin(angulo) * explosionSpeed;
@@ -606,7 +589,7 @@
                 if (velocidadActual > velocidadVagabundeo) {
                     vx *= 0.95; 
                     vy *= 0.95;
-                    if (scaling < 1) scaling += 0.02; // Escala hasta 1
+                    if (scaling < 1) scaling += 0.02; 
                 } else if (velocidadActual < velocidadVagabundeo) {
                     const factor = velocidadVagabundeo / Math.max(velocidadActual, 0.1);
                     vx *= factor;
@@ -640,7 +623,6 @@
 
                 requestAnimationFrame(animar);
             }
-            // Esperamos un instante para que la imagen cargue sus dimensiones antes de animar
             img.onload = () => requestAnimationFrame(animar);
         }
     </script>
